@@ -292,7 +292,9 @@ namespace Shibboleth.AspNetCore.Authentication
             }
             if (string.IsNullOrWhiteSpace(xml))
             {
-                using var client = _httpClientFactory.CreateClient(ShibbolethDefaults.AuthenticationScheme);
+                using var httpClientHandler = new HttpClientHandler();
+                httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; };
+                using var client = new HttpClient(httpClientHandler);
                 xml = await client.GetStringAsync(urlMetadataIdp);
             }
             if (Options.CacheIdpMetadata
@@ -426,7 +428,11 @@ namespace Shibboleth.AspNetCore.Authentication
 
         private bool ValidateSignOutResponse(LogoutResponseType response, LogoutRequestType request)
         {
-            var valid = response.Status.StatusCode.Value == SamlConst.Success && SamlHandler.ValidateLogoutResponse(response, request);
+            if (response.Status.StatusCode.Value != SamlConst.Success)
+            {
+                throw new Exception($"Unsuccessful status code: {response.Status.StatusCode.Value}");
+            }
+            var valid = SamlHandler.ValidateLogoutResponse(response, request);
             if (valid)
             {
                 return true;
@@ -653,7 +659,7 @@ namespace Shibboleth.AspNetCore.Authentication
             }
             foreach (var item in cookieProperties.Parameters)
             {
-                if (!properties.Parameters.Contains(item)) 
+                if (!properties.Parameters.Contains(item))
                     properties.Parameters.Add(item);
             }
             properties.RedirectUri = cookieProperties.RedirectUri;

@@ -20,7 +20,7 @@ namespace Shibboleth.AspNetCore.Authentication
         /// <param name="builder"></param>
         /// <returns></returns>
         public static AuthenticationBuilder AddShibboleth(this AuthenticationBuilder builder, IConfiguration configuration)
-            => builder.AddShibboleth(ShibbolethDefaults.AuthenticationScheme, configuration, _ => { });
+            => builder.AddShibboleth(ShibbolethDefaults.AuthenticationScheme, o => { o.LoadFromConfiguration(configuration); });
 
         /// <summary>
         /// Registers the <see cref="ShibbolethHandler"/> using the default authentication scheme, display name, and the given options configuration.
@@ -28,8 +28,8 @@ namespace Shibboleth.AspNetCore.Authentication
         /// <param name="builder"></param>
         /// <param name="configureOptions">A delegate that configures the <see cref="ShibbolethOptions"/>.</param>
         /// <returns></returns>
-        public static AuthenticationBuilder AddShibboleth(this AuthenticationBuilder builder, IConfiguration configuration, Action<ShibbolethOptions> configureOptions)
-            => builder.AddShibboleth(ShibbolethDefaults.AuthenticationScheme, configuration, configureOptions);
+        public static AuthenticationBuilder AddShibboleth(this AuthenticationBuilder builder, Action<ShibbolethOptions> configureOptions)
+            => builder.AddShibboleth(ShibbolethDefaults.AuthenticationScheme, configureOptions);
 
         /// <summary>
         /// Registers the <see cref="ShibbolethHandler"/> using the given authentication scheme, default display name, and the given options configuration.
@@ -38,8 +38,8 @@ namespace Shibboleth.AspNetCore.Authentication
         /// <param name="authenticationScheme"></param>
         /// <param name="configureOptions">A delegate that configures the <see cref="ShibbolethOptions"/>.</param>
         /// <returns></returns>
-        public static AuthenticationBuilder AddShibboleth(this AuthenticationBuilder builder, string authenticationScheme, IConfiguration configuration, Action<ShibbolethOptions> configureOptions)
-            => builder.AddShibboleth(authenticationScheme, ShibbolethDefaults.DisplayName, configuration, configureOptions);
+        public static AuthenticationBuilder AddShibboleth(this AuthenticationBuilder builder, string authenticationScheme, Action<ShibbolethOptions> configureOptions)
+            => builder.AddShibboleth(authenticationScheme, ShibbolethDefaults.DisplayName, configureOptions);
 
         /// <summary>
         /// Registers the <see cref="ShibbolethHandler"/> using the given authentication scheme, display name, and options configuration.
@@ -49,7 +49,7 @@ namespace Shibboleth.AspNetCore.Authentication
         /// <param name="displayName"></param>
         /// <param name="configureOptions">A delegate that configures the <see cref="ShibbolethOptions"/>.</param>
         /// <returns></returns>
-        public static AuthenticationBuilder AddShibboleth(this AuthenticationBuilder builder, string authenticationScheme, string displayName, IConfiguration configuration, Action<ShibbolethOptions> configureOptions)
+        public static AuthenticationBuilder AddShibboleth(this AuthenticationBuilder builder, string authenticationScheme, string displayName, Action<ShibbolethOptions> configureOptions)
         {
             builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IPostConfigureOptions<ShibbolethOptions>, ShibbolethPostConfigureOptions>());
             builder.Services.TryAdd(ServiceDescriptor.Singleton<IActionContextAccessor, ActionContextAccessor>());
@@ -60,7 +60,7 @@ namespace Shibboleth.AspNetCore.Authentication
                 var urlHelperFactory = factory.GetService<IUrlHelperFactory>();
                 return urlHelperFactory.GetUrlHelper(actionContext);
             });
-            builder.Services.AddOptions<ShibbolethConfiguration>().Configure(o => OptionsHelper.LoadFromConfiguration(o, configuration));
+            builder.Services.AddOptions<ShibbolethOptions>().Configure(configureOptions);
             return builder.AddRemoteScheme<ShibbolethOptions, ShibbolethHandler>(authenticationScheme, displayName, configureOptions);
         }
 

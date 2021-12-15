@@ -22,12 +22,6 @@ namespace Shibboleth.AspNetCore.Authentication.Saml
             { typeof(LogoutRequestType), new XmlSerializer(typeof(LogoutRequestType)) },
             { typeof(LogoutResponseType), new XmlSerializer(typeof(LogoutResponseType)) },
         };
-        private static readonly List<string> listAuthRefValid = new List<string>
-        {
-            SamlConst.SpidL1,
-            SamlConst.SpidL2,
-            SamlConst.SpidL3
-        };
 
         /// <summary>
         /// Build a signed SAML authentication request.
@@ -98,19 +92,6 @@ namespace Shibboleth.AspNetCore.Authentication.Saml
                     NotOnOrAfter = now.AddMinutes(10).ToString(dateTimeFormat),
                     NotOnOrAfterSpecified = true
                 },
-                //RequestedAuthnContext = new RequestedAuthnContextType
-                //{
-                //    Comparison = AuthnContextComparisonType.exact,
-                //    ComparisonSpecified = true,
-                //    Items = new string[1]
-                //    {
-                //        listAuthRefValid[identityProvider.SecurityLevel - 1]
-                //    },
-                //    ItemsElementName = new ItemsChoiceType7[1]
-                //    {
-                //        ItemsChoiceType7.AuthnContextClassRef
-                //    }
-                //}
             };
         }
 
@@ -217,102 +198,6 @@ namespace Shibboleth.AspNetCore.Authentication.Saml
                 BusinessValidation.ValidationCondition(() => !listAttribute.All(x => attributeNames.Contains(x)), ErrorLocalization.AttributeRequiredNotFound);
             if (attributeFriendlyName.Count() > 0)
                 BusinessValidation.ValidationCondition(() => !listAttribute.All(x => attributeFriendlyName.Contains(x)), ErrorLocalization.AttributeRequiredNotFound);
-
-            //BusinessValidation.ValidationCondition(() => response.IssueInstant == default, ErrorLocalization.IssueInstantMissing);
-            //DateTimeOffset issueIstant = new DateTimeOffset(response.IssueInstant);
-            //var issueIstantRequest = DateTimeOffset.Parse(request.IssueInstant);
-
-            //BusinessValidation.ValidationCondition(() => (issueIstant - issueIstantRequest).Duration() > TimeSpan.FromMinutes(10), ErrorLocalization.IssueIstantDifferentFromRequest);
-
-            //BusinessValidation.ValidationNotNullNotWhitespace(response.InResponseTo, nameof(response.InResponseTo));
-
-            //BusinessValidation.ValidationNotNullNotWhitespace(response.Destination, nameof(response.Destination));
-
-            //if (!string.IsNullOrWhiteSpace(request.AssertionConsumerServiceURL))
-            //{
-            //    BusinessValidation.ValidationCondition(() => !response.Destination.Equals(request.AssertionConsumerServiceURL), string.Format(ErrorLocalization.DifferentFrom, nameof(response.Destination), nameof(request.AssertionConsumerServiceURL)));
-            //}
-
-            //BusinessValidation.ValidationNotNullNotEmpty(response.Status, nameof(response.Status));
-
-            //BusinessValidation.ValidationCondition(() => response.Issuer == null, ErrorLocalization.IssuerNotSpecified);
-            //BusinessValidation.ValidationCondition(() => string.IsNullOrWhiteSpace(response.Issuer?.Value), ErrorLocalization.IssuerMissing);
-            //BusinessValidation.ValidationCondition(() => !response.Issuer.Value.Equals(metadataIdp.EntityID, StringComparison.InvariantCultureIgnoreCase), ErrorLocalization.IssuerDifferentFromEntityId);
-
-            ////BusinessValidation.ValidationCondition(() => !string.IsNullOrWhiteSpace(response.Issuer.Format) && !response.Issuer.Format.Equals(SamlConst.IssuerFormat), ErrorLocalization.IssuerFormatDifferent);
-
-            //BusinessValidation.ValidationNotNullNotEmpty(response?.GetAssertion(), ErrorFields.Assertion);
-            //BusinessValidation.ValidationCondition(() => response.GetAssertion().ID == null, string.Format(ErrorLocalization.Missing, ErrorFields.ID));
-            //BusinessValidation.ValidationNotNullNotWhitespace(response.GetAssertion().ID, ErrorFields.ID);
-            //BusinessValidation.ValidationCondition(() => response.GetAssertion().Version != SamlConst.Version, string.Format(ErrorLocalization.DifferentFrom, ErrorFields.Version, SamlConst.Version));
-
-            //BusinessValidation.ValidationCondition(() => response.GetAssertion().IssueInstant == null, string.Format(ErrorLocalization.NotSpecified, ErrorFields.IssueInstant));
-            //DateTimeOffset assertionIssueIstant = response.GetAssertion().IssueInstant;
-
-            //BusinessValidation.ValidationCondition(() => assertionIssueIstant > issueIstantRequest.AddMinutes(10), ErrorLocalization.IssueIstantAssertionGreaterThanRequest);
-            //BusinessValidation.ValidationCondition(() => assertionIssueIstant < issueIstantRequest, ErrorLocalization.IssueIstantAssertionLessThanRequest);
-
-            //BusinessValidation.ValidationCondition(() => (assertionIssueIstant - issueIstantRequest).Duration() > TimeSpan.FromMinutes(10), assertionIssueIstant > issueIstantRequest ? ErrorLocalization.IssueIstantAssertionGreaterThanRequest : ErrorLocalization.IssueIstantAssertionLessThanRequest);
-
-            //BusinessValidation.ValidationNotNull(response.GetAssertion().Subject, ErrorFields.Subject);
-            //BusinessValidation.ValidationNotNull(response.GetAssertion().Subject?.Items, ErrorFields.Subject);
-            //BusinessValidation.ValidationNotNullNotWhitespace(response.GetAssertion().Subject?.GetNameID()?.Value, ErrorFields.NameID);
-            //BusinessValidation.ValidationNotNullNotWhitespace(response.GetAssertion().Subject?.GetNameID()?.Format, ErrorFields.Format);
-            //BusinessValidation.ValidationCondition(() => !response.GetAssertion().Subject.GetNameID().Format.Equals(request.NameIDPolicy.Format), string.Format(ErrorLocalization.ParameterNotValid, ErrorFields.Format));
-            //BusinessValidation.ValidationCondition(() => response.GetAssertion().Subject.GetNameID().NameQualifier == null, string.Format(ErrorLocalization.NotSpecified, "Assertion.NameID.NameQualifier"));
-            //BusinessValidation.ValidationCondition(() => String.IsNullOrWhiteSpace(response.GetAssertion().Subject.GetNameID().NameQualifier), string.Format(ErrorLocalization.Missing, "Assertion.NameID.NameQualifier"));
-            //BusinessValidation.ValidationNotNullNotEmpty(response.GetAssertion().Subject.GetSubjectConfirmation(), ErrorFields.SubjectConfirmation);
-            //BusinessValidation.ValidationNotNullNotWhitespace(response.GetAssertion().Subject.GetSubjectConfirmation().Method, ErrorFields.Method);
-            //BusinessValidation.ValidationCondition(() => !response.GetAssertion().Subject.GetSubjectConfirmation().Method.Equals(SamlConst.Method), string.Format(ErrorLocalization.ParameterNotValid, ErrorFields.Method));
-            //BusinessValidation.ValidationNotNullNotEmpty(response.GetAssertion().Subject.GetSubjectConfirmation().SubjectConfirmationData, ErrorFields.SubjectConfirmationData);
-            //BusinessValidation.ValidationCondition(() => response.GetAssertion().Subject.GetSubjectConfirmation().SubjectConfirmationData.Recipient == null, string.Format(ErrorLocalization.NotSpecified, "Assertion.SubjectConfirmationData.Recipient"));
-            //BusinessValidation.ValidationCondition(() => string.IsNullOrWhiteSpace(response.GetAssertion().Subject.GetSubjectConfirmation().SubjectConfirmationData.Recipient), string.Format(ErrorLocalization.Missing, "Assertion.SubjectConfirmationData.Recipient"));
-            //BusinessValidation.ValidationCondition(() => !response.Destination.Equals(response.GetAssertion().Subject.GetSubjectConfirmation().SubjectConfirmationData.Recipient, StringComparison.OrdinalIgnoreCase), ErrorLocalization.InvalidDestination);
-            //if (!string.IsNullOrWhiteSpace(request.AssertionConsumerServiceURL))
-            //{
-            //    BusinessValidation.ValidationCondition(() => !response.GetAssertion().Subject.GetSubjectConfirmation().SubjectConfirmationData.Recipient.Equals(request.AssertionConsumerServiceURL), string.Format(ErrorLocalization.DifferentFrom, "Assertion.SubjectConfirmationData.Recipient", "Request"));
-            //}
-            //BusinessValidation.ValidationNotNullNotWhitespace(response.GetAssertion().Subject.GetSubjectConfirmation().SubjectConfirmationData.InResponseTo, ErrorFields.InResponseTo);
-            //BusinessValidation.ValidationCondition(() => !response.GetAssertion().Subject.GetSubjectConfirmation().SubjectConfirmationData.InResponseTo.Equals(request.ID), string.Format(ErrorLocalization.ParameterNotValid, ErrorFields.InResponseTo));
-
-            //BusinessValidation.ValidationCondition(() => response.GetAssertion().Subject.GetSubjectConfirmation().SubjectConfirmationData.NotOnOrAfter == null, string.Format(ErrorLocalization.NotSpecified, "Assertion.SubjectConfirmationData.NotOnOrAfter"));
-            //BusinessValidation.ValidationCondition(() => response.GetAssertion().Subject.GetSubjectConfirmation().SubjectConfirmationData.NotOnOrAfter == DateTime.MinValue, string.Format(ErrorLocalization.Missing, "Assertion.SubjectConfirmationData.NotOnOrAfter"));
-            //DateTimeOffset notOnOrAfter = new DateTimeOffset(response.GetAssertion().Subject.GetSubjectConfirmation().SubjectConfirmationData.NotOnOrAfter);
-            //BusinessValidation.ValidationCondition(() => notOnOrAfter < DateTimeOffset.UtcNow, ErrorLocalization.NotOnOrAfterLessThenRequest);
-
-            //BusinessValidation.ValidationNotNullNotWhitespace(response.GetAssertion().Issuer?.Value, ErrorFields.Issuer);
-            //BusinessValidation.ValidationCondition(() => !response.GetAssertion().Issuer.Value.Equals(metadataIdp.EntityID), string.Format(ErrorLocalization.ParameterNotValid, ErrorFields.Issuer));
-            ////BusinessValidation.ValidationCondition(() => response.GetAssertion().Issuer.Format == null, string.Format(ErrorLocalization.NotSpecified, "Assertion.Issuer.Format"));
-            ////BusinessValidation.ValidationCondition(() => string.IsNullOrWhiteSpace(response.GetAssertion().Issuer.Format), string.Format(ErrorLocalization.Missing, "Assertion.Issuer.Format"));
-            ////BusinessValidation.ValidationCondition(() => !response.GetAssertion().Issuer.Format.Equals(request.Issuer.Format), string.Format(ErrorLocalization.ParameterNotValid, ErrorFields.Format));
-
-            //BusinessValidation.ValidationCondition(() => response.GetAssertion().Conditions == null, string.Format(ErrorLocalization.NotSpecified, "Assertion.Conditions"));
-            //BusinessValidation.ValidationCondition(() => response.GetAssertion().Conditions.GetAudienceRestriction() == null && string.IsNullOrWhiteSpace(response.GetAssertion().Conditions.NotBefore) && string.IsNullOrWhiteSpace(response.GetAssertion().Conditions.NotOnOrAfter), string.Format(ErrorLocalization.Missing, "Assertion.Conditions"));
-
-            //BusinessValidation.ValidationNotNullNotWhitespace(response.GetAssertion().Conditions.NotOnOrAfter, ErrorFields.NotOnOrAfter);
-            //DateTimeOffset notOnOrAfterCondition = SamlDefaultSettings.ParseExact(response.GetAssertion().Conditions.NotOnOrAfter, "Assertion.Conditions.NotOnOrAfter");
-            //BusinessValidation.ValidationCondition(() => notOnOrAfterCondition < DateTimeOffset.UtcNow, ErrorLocalization.NotOnOrAfterLessThenRequest);
-
-
-            //BusinessValidation.ValidationNotNullNotWhitespace(response.GetAssertion().Conditions.NotBefore, ErrorFields.NotBefore);
-            //DateTimeOffset notBefore = SamlDefaultSettings.ParseExact(response.GetAssertion().Conditions.NotBefore, "Assertion.Conditions.NotBefore");
-
-            //BusinessValidation.ValidationCondition(() => notBefore > DateTimeOffset.UtcNow, ErrorLocalization.NotBeforeGreaterThenRequest);
-
-            //BusinessValidation.ValidationCondition(() => response.GetAssertion().Conditions.GetAudienceRestriction() == null, string.Format(ErrorLocalization.Missing, "Assertion.Conditions.AudienceRestriction"));
-            //BusinessValidation.ValidationNotNullNotWhitespace(response.GetAssertion().Conditions.GetAudienceRestriction().Audience?.First(), ErrorFields.Audience);
-            //BusinessValidation.ValidationCondition(() => !(response.GetAssertion().Conditions.GetAudienceRestriction().Audience.First()?.Equals(request.Issuer.Value) ?? false), string.Format(ErrorLocalization.ParameterNotValid, ErrorFields.Audience));
-
-            //BusinessValidation.ValidationCondition(() => response.GetAssertion().GetAuthnStatement() == null, string.Format(ErrorLocalization.NotSpecified, ErrorFields.AuthnStatement));
-            //BusinessValidation.ValidationCondition(() => response.GetAssertion().GetAuthnStatement().AuthnInstant == DateTime.MinValue && string.IsNullOrWhiteSpace(response.GetAssertion().GetAuthnStatement().SessionIndex) && response.GetAssertion().GetAuthnStatement().AuthnContext == null, string.Format(ErrorLocalization.Missing, ErrorFields.AuthnStatement));
-            //BusinessValidation.ValidationNotNull(response.GetAssertion().GetAuthnStatement().AuthnContext, ErrorFields.AuthnContext);
-            //BusinessValidation.ValidationNotNull(response.GetAssertion().GetAuthnStatement().AuthnContext.Items, ErrorFields.AuthnContext);
-            //BusinessValidation.ValidationNotNull(response.GetAssertion().GetAuthnStatement().AuthnContext.ItemsElementName, ErrorFields.AuthnContext);
-            //BusinessValidation.ValidationCondition(() => response.GetAssertion().GetAuthnStatement().AuthnContext.GetAuthnContextClassRef() == null, string.Format(ErrorLocalization.NotSpecified, "AuthnStatement.AuthnContext.AuthnContextClassRef"));
-            //BusinessValidation.ValidationCondition(() => string.IsNullOrWhiteSpace(response.GetAssertion().GetAuthnStatement().AuthnContext.GetAuthnContextClassRef()), string.Format(ErrorLocalization.Missing, "AuthnStatement.AuthnContext.AuthnContextClassRef"));
-            //BusinessValidation.ValidationCondition(() => !response.GetAssertion().GetAuthnStatement().AuthnContext.GetAuthnContextClassRef().Equals(request.RequestedAuthnContext.Items[0]), string.Format(ErrorLocalization.ParameterNotValid, ErrorFields.AuthnContextClassRef));
-
-            //BusinessValidation.ValidationCondition(() => !listAuthRefValid.Contains(response.GetAssertion().GetAuthnStatement().AuthnContext.GetAuthnContextClassRef()), string.Format(ErrorLocalization.ParameterNotValid, ErrorFields.AuthnContextClassRef));
         }
 
         /// <summary>
@@ -423,10 +308,6 @@ namespace Shibboleth.AspNetCore.Authentication.Saml
         /// <returns>True if valid, false otherwise</returns>
         public static bool ValidateLogoutResponse(LogoutResponseType response, LogoutRequestType request)
         {
-            var xmlDoc = response.SerializeToXmlDoc();
-
-            BusinessValidation.ValidationCondition(() => XmlHelpers.VerifySignature(xmlDoc), ErrorLocalization.InvalidSignature);
-
             return (response.InResponseTo == request.ID);
         }
 
