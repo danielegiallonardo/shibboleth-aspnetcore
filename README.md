@@ -3,7 +3,7 @@ This is a custom implementation of an AspNetCore RemoteAuthenticationHandler for
 
 The purpose of this project is to provide a simple and immediate tool to integrate, in a WebApp developed with AspNetCore MVC, the authentication services of Shibboleth, automating the login/logout flows, the management of the SAML protocol, the security and simplifying development activities.
 
-# Integration
+# Getting started
 
 The library is distributed in the form of a NuGet package, which can be installed via the command
 
