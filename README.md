@@ -202,5 +202,14 @@ private IEnumerable<TSource> FromHierarchy<TSource>(TSource source,
 }
 ```
 
+
+# Samples
+Inside the `samples` folder you can find some example webapp implementations that make use of the library:
+
+- 1_SimpleSPWebApp: simple AspNetCore MVC webapp that uses Shibboleth as a login system
+- 2_IdentityServer: implementation of an instance of IdentityServer4 (which acts as an OIDC proxy towards Shibboleth) which uses Shibboleth as an external login system, and an MVC webapp federated with the instance of IdentityServer4
+
+These are examples of library integration only, they should not be used "as-is" in production environments.
+
 # Authors
 * [Daniele Giallonardo](https://github.com/danielegiallonardo) (maintainer)
