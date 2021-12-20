@@ -29,7 +29,7 @@ public void ConfigureServices(IServiceCollection services)
 ```
 
 In this way, the middleware necessary for the management of login/logout requests/responses from/to the Shibboleth identityProvider are added. 
-These middleware add to the webapp the `/signin-shibboleth` and `/signout-shibboleth` endpoints on which the library listens to interpret the Login and Logout responses respectively coming from the spid IdentityProviders. 
+These middleware add to the webapp the `/signin-shibboleth` and `/signout-shibboleth` endpoints on which the library listens to interpret the Login and Logout responses respectively coming from the Shibboleth IdentityProvider. 
 These endpoints, in their absolute URL, and therefore including the schema and hostname (for example `https://webapp.customdomain.it/signin-shibboleth` and `https://webapp.customdomain.it/signout-shibboleth`), must be specified in the `AssertionConsumerService` and` SingleLogoutService` tags of the SP metadata, respectively.
 
 A complete example of AspNetCore MVC webapp that makes use of this library is present within this repository under the folder `samples/Shibboleth.AspNetCore.WebApp`. To use it, simply configure the `AssertionConsumerServiceIndex`,` AttributeConsumingServiceIndex`, `EntityId` and` Certificate` parameters in `appsettings.json` with those related to your test metadata, and launch the webapp.
