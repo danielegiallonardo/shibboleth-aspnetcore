@@ -13,7 +13,6 @@
         public RequestMethod Method { get; set; } = RequestMethod.Post;
         public string DateTimeFormat { get; internal set; }
         public double? NowDelta { get; internal set; }
-        public ProviderType ProviderType { get; set; } = ProviderType.IdentityProvider;
         public int SecurityLevel { get; set; }
     }
 }

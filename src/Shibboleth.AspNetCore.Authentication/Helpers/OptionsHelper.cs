@@ -23,7 +23,6 @@ namespace Shibboleth.AspNetCore.Authentication.Helpers
                     OrganizationName = identityProviderSection.GetValue<string>("OrganizationName"),
                     OrganizationUrl = identityProviderSection.GetValue<string>("OrganizationUrl"),
                     OrganizationUrlMetadata = identityProviderSection.GetValue<string>("OrganizationUrlMetadata"),
-                    ProviderType = identityProviderSection.GetValue<ProviderType>("Type"),
                     SingleSignOnServiceUrl = identityProviderSection.GetValue<string>("SingleSignOnServiceUrl"),
                     SingleSignOutServiceUrl = identityProviderSection.GetValue<string>("SingleSignOutServiceUrl"),
                     SecurityLevel = identityProviderSection.GetValue<int?>("SecurityLevel") ?? 3,
