@@ -55,7 +55,6 @@ In particular, it is possible to add a 'Shibboleth' section to the configuration
       "SingleSignOnServiceUrl": "<IdP_SSO_Url>",
       "SingleSignOutServiceUrl": "<IdP_SLO_Url>",
       "Method": "Post",
-      "Type": "StagingProvider",
       "SecurityLevel": 2
     },
     "Certificate": {
